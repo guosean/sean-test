@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"  
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"  
+       default-lazy-init="true">  
+       
+	<bean id="cookieGenJobFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+		<property name="triggers">
+			<list>
+				<ref local="cookieGenTrigger"/>
+			</list>
+		</property>
+	</bean>
+    <bean id="cookieGenTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+    	<property name="jobDetail" ref="cookieGenFlushJob"/>
+    	<property name="cronExpression" value="0 */2 * * * ?"></property><!-- 每隔两分钟执行一次 -->
+    </bean>
+    <!-- 定时刷新cookie任务 -->
+    <bean id="cookieGenFlushJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+    	<property name="jobClass" value="com.asiainfo.biframe.psma.cookie.service.imp.CookieRefreshJob"></property>
+    </bean>
+    
+</beans>

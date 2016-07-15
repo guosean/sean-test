@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- 连接池设置 -->
+	<bean id="poolConfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
+		<property name="maxTotal" value="8" />
+		<property name="maxIdle" value="8" />
+		<property name="minIdle" value="0" />
+		<property name="maxWaitMillis" value="-1" />
+	</bean>
+	<!-- 连接池配置形式、端口为默认:6379 -->
+	<bean id="redisPool" class="redis.clients.jedis.JedisPool"
+		singleton="true" lazy-init="true">
+		<!-- 连接池配置 -->
+		<constructor-arg index="0">
+			<ref bean="poolConfig" />
+		</constructor-arg>
+		<!-- host -->
+		<constructor-arg index="1" value="192.168.0.106" />
+		<!-- port -->
+		<constructor-arg index="2" value="6379" type="int" />
+	</bean>
+	<bean id="slave1" class="redis.clients.jedis.JedisShardInfo">
+		<constructor-arg index="0" value="192.168.0.106" />
+		<!-- port -->
+		<constructor-arg index="1" value="6378" type="int" />
+	</bean>
+	<bean id="shardedPool" class="redis.clients.jedis.ShardedJedisPool">
+		<constructor-arg index="0">
+			<ref bean="poolConfig" />
+		</constructor-arg>
+		<constructor-arg>
+			<list>
+				<ref local="slave1" />
+			</list>
+		</constructor-arg>
+	</bean>
+	<!-- redis服务 -->
+	<bean id="redisService" class="com.sean.service.imp.RedisService"
+		lazy-init="true">
+		<property name="jedisPool">
+			<ref local="redisPool" />
+		</property>
+	</bean>
+
+</beans>
