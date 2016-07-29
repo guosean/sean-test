@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<control>
+    <pid value="10010" open="true">
+        <mtype value="15">
+            <t value="t1" limit="100" open="false"/>
+            <t value="t2" limit="100" />
+        </mtype>
+        <mtype value="100" open="true">
+            <t value="t2" limit="1" open="false" />
+            <t value="t1" limit="1" open="true" duration="60" />
+        </mtype>
+    </pid>
+    <pid value="90010" open="false">
+    </pid>
+</control>

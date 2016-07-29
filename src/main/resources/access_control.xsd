@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="gbk"?> <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:element name="control">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="pid" minOccurs="0" maxOccurs="unbounded">
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="pid">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="mtype" minOccurs="0" maxOccurs="unbounded">
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="value" type="xs:string" use="required"></xs:attribute>
+            <xs:attribute name="open" type="xs:boolean" use="optional"></xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="mtype">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="t" maxOccurs="unbounded">
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute name="value" type="xs:string" use="required"></xs:attribute>
+            <xs:attribute name="open" type="xs:boolean" use="optional"></xs:attribute>
+            <xs:attribute name="limit" type="xs:int" use="optional"></xs:attribute>
+            <xs:attribute name="duration" type="xs:int" use="optional"></xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="t">
+        <xs:complexType>
+            <xs:attribute name="value" type="xs:string" use="required"></xs:attribute>
+            <xs:attribute name="open" type="xs:boolean" use="optional"></xs:attribute>
+            <xs:attribute name="limit" type="xs:int" use="optional"></xs:attribute>
+            <xs:attribute name="duration" type="xs:int" use="optional"></xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
