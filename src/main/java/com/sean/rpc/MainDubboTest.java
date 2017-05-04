@@ -28,6 +28,7 @@ public class MainDubboTest {
     public static void buildProviderWithApi(){
         ApplicationConfig applicationConfig = new ApplicationConfig("sean_provider");
         RegistryConfig registryConfig = new RegistryConfig("zookeeper://127.0.0.1:2181");
+        registryConfig.setGroup("/sean/test");
         ProtocolConfig protocolConfig = new ProtocolConfig("dubbo",20880);
         ServiceConfig<DemoService> serviceConfig = new ServiceConfig<DemoService>();
         serviceConfig.setInterface(DemoService.class);
@@ -35,6 +36,9 @@ public class MainDubboTest {
         serviceConfig.setApplication(applicationConfig);
         serviceConfig.setRegistry(registryConfig);
         serviceConfig.setRef(new DemoServiceImpl());
+        serviceConfig.setVersion("1.0.0");
+        serviceConfig.setTimeout(3000);
+
         serviceConfig.export();
     }
 

@@ -39,7 +39,7 @@ public class TimeClient {
     }
 
     public static void main(String[] args) throws  Exception{
-        int port = 8080;
+        int port = 8088;
 
         if(null != args && args.length > 0){
             try{

@@ -36,11 +36,12 @@ public class DubboConsumerTest {
         ApplicationConfig applicationConfig = new ApplicationConfig("sean_consumer");
         RegistryConfig registryConfig = new RegistryConfig("zookeeper://127.0.0.1:2181");
         registryConfig.setProtocol("zookeeper");
+        registryConfig.setGroup("/sean/test");
         ReferenceConfig<DemoService> referenceConfig = new ReferenceConfig<DemoService>();
         referenceConfig.setInterface(DemoService.class);
         referenceConfig.setApplication(applicationConfig);
         referenceConfig.setRegistry(registryConfig);
-//        referenceConfig.setProtocol("dubbo");
+        referenceConfig.setVersion("1.0.0");
         return referenceConfig.get();
     }
 

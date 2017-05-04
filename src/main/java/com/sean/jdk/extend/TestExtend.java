@@ -10,32 +10,38 @@ package com.sean.jdk.extend;
  * 
  * 
  */
-public class TestExtend {
+public class TestExtend extends Parent{
+
+	static {
+		System.out.println("TestExtend static block");
+	}
 
 	public static void main(String[] args) {
-		Parent pt = new Child();
+		/*Parent pt = new Child();
 		// Child cd = new Child();
 		System.out.println(pt.getName() + pt.getAge() + " " + pt.age);
 //		pt.imStatic();
 		System.out.println(pt.getClass().toString());
-		pt.imGeneral();
+		pt.imGeneral();*/
+		System.out.println("test");
 		// System.out.println(cd.getName()+cd.getAge()+" "+cd.age);
 	}
-  static class Test{
-	  
-  }
+
 }
 
 class Parent {
 	static {
 		System.out.println("Parent static");
+		/*if(1 != 2){
+			throw new RuntimeException();
+		}*/
 	}
 
-	/*public Parent() {
+	public Parent() {
 		this.name = "parent";
 		this.age = 10;
 		System.out.println("Parent build");
-	}*/
+	}
 
 	private String name;
 	public int age;
@@ -64,6 +70,15 @@ class Parent {
 		System.out.println("parent general");
 	};
 
+	protected final void testFinal(){
+		System.out.println("parent final");
+	}
+
+	private void testPrivate(){
+		System.out.println("private method");
+	}
+
+
 }
 
 class Child extends Parent {
@@ -90,5 +105,6 @@ class Child extends Parent {
 	}
 	public void imGeneral(){
 		System.out.println("child general");
-	};
+	}
+
 }

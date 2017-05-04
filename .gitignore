@@ -33,3 +33,5 @@ Thumbs.db
 # *.tar
 # *.tar.gz
 /build/
+enum.out
+

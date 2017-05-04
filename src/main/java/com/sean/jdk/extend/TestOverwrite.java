@@ -11,8 +11,19 @@ public class TestOverwrite {
 		man = new Woman();
 		man.sayHello();
 	}
+	class InnerClass{
+		int i=0;
+		int getI(){
+			return i;
+		}
+
+	}
    static abstract class Human{
 	   public abstract  void sayHello();
+
+	   public static void main(String[] args) {
+		   System.out.println("i'm human");
+	   }
    }
    
    static class Man extends Human{ 

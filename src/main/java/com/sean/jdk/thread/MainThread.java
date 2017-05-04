@@ -5,11 +5,17 @@ import java.util.Date;
 public class MainThread {
 	
 	public static void main(String[] args) {
-/*		Thread p1 = new Thread(new PrinterThread(1, "PrinterThread1"));
-	    p1.start();
-		Thread p2 = new Thread(new PrinterThread(3, "PrinterThread2"));
-		p2.start();*/
-	    new Thread() {
+		Thread p1 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				System.out.println("p1 thread");
+			}
+		});
+		System.out.println(p1.getState().toString());
+		p1.start();
+		System.out.println(p1.getState().toString());
+
+	    /*new Thread() {
 			@Override
 			public void run() {
 				while(true) {
@@ -22,12 +28,10 @@ public class MainThread {
 				}
 				}
 			}
-		}.start();
-	
-	while(true) {
-		   System.out.println(Thread.currentThread().getName());
-		}
+		}.start();*/
+
 	}
+
 }
 
 class PrinterThread implements Runnable{

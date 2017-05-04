@@ -7,6 +7,8 @@ import java.util.StringTokenizer;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
+import javax.xml.bind.SchemaOutputResolver;
+
 public class TestCommons {
 	private static final String LINE_SEP = "\n";
 	private static final Object TAB = "\t";
@@ -93,5 +95,10 @@ public class TestCommons {
 				}
 			}
 		return sb.toString();
+	}
+
+	@Test
+	public void testDiff(){
+		System.out.println(StringUtils.difference("abc",""));
 	}
 }

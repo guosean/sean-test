@@ -38,11 +38,12 @@ public class TimeServer {
         @Override
         protected void initChannel(SocketChannel socketChannel) throws Exception {
             socketChannel.pipeline().addLast(new TimeServerHandler());
+
         }
     }
 
     public static void main(String[] args) throws  Exception{
-        int port = 8080;
+        int port = 8088;
         if(null != args && args.length > 0){
             try{
                 port = Integer.valueOf(args[0]);
