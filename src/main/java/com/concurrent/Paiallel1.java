@@ -69,8 +69,10 @@ public class Paiallel1 {
         TaskWithResult calbTask = new TaskWithResult(segArray(0, array.length, array));
         FutureTask<Integer> task = new FutureTask<Integer>(calbTask);
         exec.submit(task); 
-        long end2 = System.currentTimeMillis();
+
         exec.shutdown();
+        task.get();
+        long end2 = System.currentTimeMillis();
         System.out.println("线性计算耗时：" + (end2 - start2));
         System.out.println("单独计算的结果：" + task.get());
     }

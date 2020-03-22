@@ -12,7 +12,7 @@ public class MainTest {
 		ApplicationContext ctx = new ClassPathXmlApplicationContext("config/aop.xml");
 		 IBaseBusiness business = (IBaseBusiness ) ctx.getBean("businessProxy");
 //	     business.delete("猫");
-	     business.modify("狗");
+		System.out.println(business.modify("狗"));
 	}
 
 }

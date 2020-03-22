@@ -1,8 +1,10 @@
 package com.sean.jdk.thread;
 
 public class ThreadLocalTest  implements Runnable{
-
+	static ThreadLocal local = new ThreadLocal();
 	public void run() {
+		local.set("2");
+		local.remove();
 		int serialNum = SerialNum.get();
 		System.out.println("线程 " + Thread.currentThread().getName()
                 + " 获取到的序列号是" + serialNum);

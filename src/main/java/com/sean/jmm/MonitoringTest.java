@@ -15,10 +15,13 @@ public class MonitoringTest {
 			Thread.sleep(1000);
 			list.add(new OOMObject());
 		}
+
 		System.gc();
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
-		fillHeap(1000);
+//		fillHeap(1000);
+		Object o = new Object();
+		o.wait();
 	}
 }

@@ -24,6 +24,7 @@ public class SumObj {
 	}
 	private int sum=0;
 	
+	@Override
 	public String toString(){
 		return "x:"+x+",y:"+y+",sum:"+sum;
 	}

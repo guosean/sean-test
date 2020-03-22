@@ -17,6 +17,7 @@ public class BaseBeforeAdvice implements MethodBeforeAdvice {
 
 	        System.out.println("要进入切入点方法了 \n");
 
+
 	}
 
 }

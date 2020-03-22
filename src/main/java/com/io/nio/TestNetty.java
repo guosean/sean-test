@@ -2,9 +2,7 @@ package com.io.nio;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.buffer.Unpooled;
 import io.netty.buffer.UnpooledByteBufAllocator;
-import io.netty.util.internal.SystemPropertyUtil;
 
 /**
  * Created by guozhenbin on 16/8/3.

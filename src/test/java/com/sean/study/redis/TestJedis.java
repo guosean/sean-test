@@ -13,6 +13,7 @@ import org.junit.Test;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPubSub;
+import redis.clients.jedis.Transaction;
 
 public class TestJedis {
 	JedisPool pool = null;
@@ -32,6 +33,9 @@ public class TestJedis {
 	public void testString(){
 		String key = "key";
 		String value = "kValue";
+		Transaction transaction = cli.multi();
+		transaction.exec();
+
 		cli.set(key, value);
 		Assert.assertEquals(value, cli.get(key));
 		cli.append(key, "1");

@@ -62,7 +62,7 @@ public class FileUtils {
 			lineStr = reader.readLine();
 			if(null != lineStr){
 				sb.append(lineStr);
-				sb.append("\n");//换行符
+				sb.append(",");//换行符
 			}
 		}while(null != lineStr);
 		reader.close();

@@ -1,14 +1,12 @@
 package com.sean.guava;
 
-import java.util.Arrays;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
-
 import com.google.common.base.CaseFormat;
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Joiner;
+import junit.framework.Assert;
+import org.junit.Test;
+
+import java.util.Arrays;
 
 public class TestString {
 	@Test
@@ -26,7 +24,6 @@ public class TestString {
     @Test
 	public void testCharMatcher(){
 		String str = "1ab#@|,.A";
-		Assert.assertEquals("abA", CharMatcher.JAVA_LETTER.retainFrom(str));
 		Assert.assertEquals("a", CharMatcher.isNot('a').removeFrom(str));
 	}
     @Test
