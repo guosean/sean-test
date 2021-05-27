@@ -1,16 +1,15 @@
 package com.sean.jdk.reflection;
 
+import org.junit.Test;
+
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import org.junit.Test;
-
 public class TestReflection {
 	@Test
-	public void testInterfaces() throws ClassNotFoundException{
-	  Class clz = ChildWork.class;//MaWork.class;
+	public void testInterfaces() {
+	  Class clz = ChildWork.class;
       Class[] clzs = clz.getInterfaces();
       for (Class class1 : clzs) {
 		System.out.println(class1.getName());
@@ -23,6 +22,7 @@ public class TestReflection {
 		Field[] fields = clz.getFields();
 		Field fd = clz.getDeclaredField("name");
 		fd.setAccessible(true);
+
 		System.out.println(fd.get(mw));
 	}
 	@Test

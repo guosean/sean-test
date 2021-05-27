@@ -30,7 +30,6 @@ public class SeanNettyServer {
     public static void main(String[] args) {
         SeanNettyServer seanServer = new SeanNettyServer();
         seanServer.initServer();
-
     }
 
     private void initServer(){

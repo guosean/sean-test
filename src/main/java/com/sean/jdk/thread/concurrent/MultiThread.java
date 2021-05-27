@@ -26,9 +26,22 @@ public class MultiThread {
 
         MultiConditionComupute mcc = new MultiConditionComupute();
         try {
-            System.out.println(mcc.compute("sss"));
-            System.out.println(mcc.compute("abcd"));
-        } catch (ExecutionException e) {ø
+            long start = System.currentTimeMillis();
+            for (int i = 0; i < 1000; i++) {
+                mcc.compute("sss");
+                mcc.compute("abcd");
+            }
+
+            System.out.println(System.currentTimeMillis() - start);
+
+            start = System.currentTimeMillis();
+            for (int j = 0; j < 1000; j++) {
+                mcc.computeSync("sss");
+                mcc.computeSync("abcd");
+            }
+
+            System.out.println(System.currentTimeMillis() - start);
+        } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -39,23 +52,49 @@ public class MultiThread {
 
 class MultiConditionComupute {
 
-    List<Condition> conditions = Arrays.asList(s -> !s.isEmpty(), s -> s.startsWith("a"), s -> s.contains("cd"));
+    List<Condition> conditions = Arrays.asList(s -> {
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return !s.isEmpty();
+    }, s -> {
+        try {
+            Thread.sleep(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return s.startsWith("a");
+    }, s -> {
+        try {
+            Thread.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return s.contains("cd");
+    });
 
-    ListeningExecutorService executorService = MoreExecutors.listeningDecorator(Executors.newCachedThreadPool());
+    ListeningExecutorService executorService = MoreExecutors.listeningDecorator(Executors.newFixedThreadPool(3));
 
-
-    public boolean compute(String str) throws ExecutionException, InterruptedException {
-        boolean result = false;
-        List<ListenableFuture<Boolean>> futures = Lists.newLinkedList();
+    public boolean computeSync(String str) {
+        List<Boolean> list = Lists.newArrayListWithCapacity(conditions.size());
 
         for (Condition condition : conditions) {
-            futures.add(executorService.submit(new ConditionTask(condition, str)));
+            list.add(condition.test(str));
         }
 
-        List<Boolean> futureResult = Futures.allAsList(futures).get();
-        result = !futureResult.stream().anyMatch(b -> b == false);
+        return !list.stream().anyMatch(b -> b == false);
+    }
 
-        return result;
+    public boolean compute(String str) throws ExecutionException, InterruptedException {
+        List<ListenableFuture<Boolean>> futures = Lists.newLinkedList();
+
+        conditions.stream().forEach(condition -> futures.add(executorService.submit(new ConditionTask(condition, str))));
+
+        List<Boolean> futureResult = Futures.allAsList(futures).get();
+
+        return !futureResult.stream().anyMatch(b -> b == false);
     }
 }
 
@@ -78,8 +117,7 @@ class ConditionTask implements Callable<Boolean> {
 
     @Override
     public Boolean call() throws Exception {
-
         return null == condition || condition.test(value);
-
     }
+
 }
