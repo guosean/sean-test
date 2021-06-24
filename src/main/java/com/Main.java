@@ -1,16 +1,18 @@
 package com;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +27,29 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        List<Integer> skuList = Lists.newArrayList(231, 238, 270, 340, 200, 266, 219, 282, 285, 315, 304, 346, 295, 323, 335);
+        List<String> titleList = Lists.newArrayList("{lec_name}老师的《{course_name}》正在直播，快来看看吧>>",
+                "{lec_name}老师的《{course_name}》开始了", "跟{sku}老师一起学习《{course_name}》，进来看看吧",
+                "精选{sku}课：《{course_name}》", "一起来看《{course_name}》",
+                "我在学习《{course_name}》，一起来看吧");
+        List<String> textList = Lists.newArrayList("大家好，{lec_name}老师的{sku}公开课正在直播，快来看看吧~\\n\\n课程名称：{course_name}\\n\\n授课讲师：{lec_name}·{lec_title}\\n\\n点击上方小程序，与老师同学一起互动学习~", "【上课通知】今日推荐的{sku}公开课开播啦\\n\\n课程名称：{course_name}\\n\\n{lec_name}老师：{lec_title}\\n\\n点击上方小程序，马上进入直播间~");
+//        System.out.println(titleList);
+        String textInsertFmt = "INSERT INTO `hs_ad_material_unit` (`unit_type`, `material_content_type`, `material_type`, `content`, `sku_id`, `create_user`)\n" +
+                "VALUES\n" +
+                "\t('groupText', 'text', 4, '%s', %s, 'zhenbin.guo');";
+        String titleInsertFmt = "INSERT INTO `hs_ad_material_unit` (`unit_type`, `material_content_type`, `material_type`, `content`, `sku_id`, `create_user`)\n" +
+                "VALUES\n" +
+                "\t('mpCardTitle', 'miniprogrampage', 4, '%s', %s, 'zhenbin.guo');";
+        skuList.forEach(sku -> {
+            titleList.forEach(tit -> {
+                System.out.println(String.format(titleInsertFmt, tit, sku));
+            });
+            textList.forEach(txt -> {
+                System.out.println(String.format(textInsertFmt, txt, sku));
+            });
+        });
 //        readSkuAndLec();
-        readSkuAndSub();
+//        readSkuAndSub();
         /*String inFileName = String.format("/Users/guozhenbin/tmp/0107");
         BufferedReader reader = new BufferedReader(new FileReader(inFileName));
         String lineStr = null;//单行数据
@@ -44,28 +67,62 @@ public class Main {
     }
 
     public static void readSkuAndLec() throws IOException {
-        String inFileName = String.format("/Users/guozhenbin/tmp/lec_sku");
+        String inFileName = String.format("/Users/guozhenbin/tmp/sku");
+
         BufferedReader reader = new BufferedReader(new FileReader(inFileName));
         String lineStr = null;//单行数据
-
-        Map<String, List<String>> maps = Maps.newHashMap();
+        List<String> skuMapList = Lists.newArrayList("写意画", "11", "英语", "13", "旅游", "17", "民歌", "18", "楷书", "21", "瑜伽", "23", "电子琴", "24", "葫芦丝", "26", "工笔画", "30", "太极", "33", "京剧", "38", "钢琴", "41", "古筝", "42", "视唱练耳", "45", "养生", "49", "二胡", "52", "彩铅", "62", "中医", "67", "口琴", "83", "中国古典舞", "416", "行书", "425", "美声", "431", "通俗", "432", "文学朗诵", "447", "练唱室", "515");
+        List<String> skuIndexList = Lists.newArrayList("民歌", "写意画", "钢琴", "美声", "视唱练耳", "楷书", "葫芦丝", "通俗", "养生", "文学朗诵", "二胡", "练唱室", "古筝", "工笔画", "英语", "电子琴", "京剧", "彩铅", "中医", "行书", "太极", "瑜伽", "中国古典舞", "旅游", "口琴");
+        Map<String, String> skuMap = Maps.newHashMap();
+        for (int i = 0; i < skuMapList.size(); i = i + 2) {
+            skuMap.put(skuMapList.get(i), skuMapList.get(i + 1));
+        }
+        System.out.println(skuMap);
+        Map<String, List<HsCategorySimpleDTO>> maps = Maps.newHashMap();
+        int i = 0;
+        List<String> noSku = Lists.newArrayList("45", "515");
         do {
             lineStr = reader.readLine();
-            if (null != lineStr) {
+            String lineSku = skuMap.get(skuIndexList.get(i));
+            List<HsCategorySimpleDTO> relativeSku = Lists.newLinkedList();
+            DecimalFormat df = new DecimalFormat("0.00");
+            if (null != lineStr && !noSku.contains(lineSku)) {
+
                 List<String> list = Splitter.on("\t").splitToList(lineStr);
-                if (list.size() == 2) {
-                    String sku = list.get(1);
-                    String sub = list.get(0);
-                    List<String> subList = maps.get(sku);
-                    if (Objects.isNull(subList)) {
-                        subList = Lists.newLinkedList();
+                for (int j = 0; j < list.size(); j++) {
+                    if (StringUtils.equalsIgnoreCase(list.get(j), "null")) {
+                        continue;
                     }
-                    subList.add(sub);
-                    maps.put(sku, subList);
+                    try {
+                        Double score = Double.valueOf(list.get(j));
+                        HsCategorySimpleDTO dto = new HsCategorySimpleDTO();
+                        if (noSku.contains(skuMap.get(skuIndexList.get(j)))) {
+                            continue;
+                        }
+                        dto.setId(Integer.valueOf(skuMap.get(skuIndexList.get(j))));
+                        if (score > 0) {
+                            dto.setRelativeScore(Double.valueOf(df.format(score)));
+                            relativeSku.add(dto);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
+                System.out.println(list);
             }
-        } while (null != lineStr);
+            maps.put(lineSku, relativeSku);
+            i++;
+        } while (null != lineStr && i < 25);
         System.out.println(JSON.toJSONString(maps));
+    }
+
+    @Data
+    public static class HsCategorySimpleDTO {
+        private Integer id;
+        /**
+         * 相关性系数
+         */
+        private Double relativeScore;
     }
 
     public static void readSkuAndSub() throws IOException {
