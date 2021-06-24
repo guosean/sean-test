@@ -893,9 +893,7 @@ public final class GenericTree<T> {
         }
 
         /**
-         * Gets the local order within the tree at which this node lives.
-         * Local order is determined by how far (from left to right) this
-         * node lives amongst its siblings (underneath its parent). Order is zero
+         * Gets the local order within the tree at which this node lives.* node lives amongst its siblings (underneath its parent). Order is zero
          * indexed meaning that left-most nodes under a parent have a local
          * index of 0.
          *
